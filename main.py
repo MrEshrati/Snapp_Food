@@ -1,1 +1,4 @@
-from db import db
+from Platform import Platform
+
+app = Platform()
+app.Run()
