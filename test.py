@@ -64,6 +64,13 @@ canvas.create_text(
     font=("Segoe UI", 14)
 )
 
+canvas.create_text(
+    450, 370,
+    text="Role",
+    fill="white",
+    font=("Segoe UI", 14)
+)
+
 role_var = StringVar(value="Customer")
 role_menu = OptionMenu(root, role_var, "Manager", "Customer")
 canvas.create_window(650, 370, window=role_menu)
