@@ -22,6 +22,13 @@ class DB:
         elif collection_name == "Orders":
             self.order.insert_one(data)
     
+    def upgrade_password(self, user_id, old_password, password_hash):
+        result = self.users.update_one(
+            {"_id": user_id, "password": old_password, "password_hash": {"$exists": False}},
+            {"$set": {"password_hash": password_hash}, "$unset": {"password": ""}},
+        )
+        return result.modified_count == 1
+
     def GetData(self,collectoin_name,query):
         if collectoin_name == "Users":
             userList = []

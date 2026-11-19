@@ -1,3 +1,7 @@
+# Uncomment these imports with the optional demo user blocks below.
+# import os
+# from passwords import hash_password
+
 from Platform import Platform
 from db import DB
 
@@ -6,8 +10,8 @@ db = DB()
 # db.PostData("Users",{
 #     "_id": "m1",
 #     "name": "FirstManager",
-#     "username": "REDACTED",
-#     "password": "REDACTED",
+#     "username": os.environ["SNAPP_DEMO_MANAGER_USERNAME"],
+#     "password_hash": hash_password(os.environ["SNAPP_DEMO_MANAGER_PASSWORD"]),
 # })
 
 # db.PostData("Restaurants",{
@@ -44,8 +48,8 @@ db = DB()
 # db.PostData("Users",{
 #     "_id": "c1",
 #     "name": "FirstCustomer",
-#     "username": "REDACTED",
-#     "password": "REDACTED",
+#     "username": os.environ["SNAPP_DEMO_CUSTOMER_USERNAME"],
+#     "password_hash": hash_password(os.environ["SNAPP_DEMO_CUSTOMER_PASSWORD"]),
 # })
 
 app = Platform()

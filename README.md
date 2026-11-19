@@ -9,3 +9,9 @@ A desktop food-ordering coursework prototype built with Python, Tkinter, Pillow,
 3. Run `python main.py` from the repository root.
 
 The app uses a local `Snapp_Food` database. The [original Persian notes](README.txt) describe optional sample data and the current sign-in workflow. Restart the app to switch users.
+
+## Local accounts
+
+New signups store a salted password hash. An existing account with a plaintext password is upgraded at its next successful sign-in.
+
+To load the optional demo records in `main.py`, supply your own `SNAPP_DEMO_MANAGER_USERNAME`, `SNAPP_DEMO_MANAGER_PASSWORD`, `SNAPP_DEMO_CUSTOMER_USERNAME`, and `SNAPP_DEMO_CUSTOMER_PASSWORD` in the environment, then follow the original seeding notes. Uncomment the imports at the top of `main.py` for that one-time setup.

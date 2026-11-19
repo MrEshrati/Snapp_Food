@@ -9,6 +9,7 @@ from tkinter import ttk, Canvas
 from PIL import Image, ImageTk
 import os
 from constants import WIDTH, HEIGHT
+from passwords import hash_password, verify_password
 
 
 class Platform:
@@ -78,7 +79,7 @@ class Platform:
                     "_id": user._id,
                     "name": user.name,
                     "username": user.username,
-                    "password": user.password,
+                    "password_hash": hash_password(user.password),
                 },
             )
 
@@ -92,27 +93,35 @@ class Platform:
             self.main_frame.tkraise()
 
     def Signin(self, username, password, alertText, canvas):
-        for user in self.users:
-            if (
-                user["username"] == username.get()
-                and user["password"] == password.get()
+        entered_password = password.get()
+        for user in self.db.GetData("Users", {"username": username.get()}):
+            stored_hash = user.get("password_hash")
+            if stored_hash is not None:
+                if not verify_password(entered_password, stored_hash):
+                    continue
+            elif user.get("password") != entered_password or not self.db.upgrade_password(
+                user["_id"], entered_password, hash_password(entered_password)
             ):
-                self.current_user = user
-                username.delete(0, END)
-                password.delete(0, END)
-                canvas.itemconfig(alertText, text="")
+                continue
 
-                if self.current_user["_id"][0] == "m":
-                    self.restaurants = self.db.GetData(
-                        "Restaurants", {"managerId": self.current_user["_id"]}
-                    )
-                else:
-                    self.restaurants = self.db.GetData("Restaurants", "")
+            user.pop("password", None)
+            user.pop("password_hash", None)
+            self.current_user = user
+            username.delete(0, END)
+            password.delete(0, END)
+            canvas.itemconfig(alertText, text="")
 
-                self.CreateHome()
-                self.home_frame.tkraise()
+            if self.current_user["_id"][0] == "m":
+                self.restaurants = self.db.GetData(
+                    "Restaurants", {"managerId": self.current_user["_id"]}
+                )
+            else:
+                self.restaurants = self.db.GetData("Restaurants", "")
 
-                return
+            self.CreateHome()
+            self.home_frame.tkraise()
+
+            return
 
         canvas.itemconfig(alertText, text="Username/Password is Incorrectl")
 
